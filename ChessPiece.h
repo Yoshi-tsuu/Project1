@@ -1,51 +1,64 @@
-#ifndef CHESSPIECE_H
-#define CHESSPIECE_H
+#pragma once
 
 #include <iostream>
 #include <vector>
+
 using namespace std;
 
-class ChessPiece {
+class ChessPiece 
+{
 public:
-    virtual char getSymbol() const = 0;
-    virtual bool isValidMove(int fromRow, int fromCol, int toRow, int toCol, const vector<vector<ChessPiece*>>& board, char playerSymbol) const = 0;
-    virtual ~ChessPiece() {}
+    virtual char getSymbol() = 0;
+    char getColor();
+    virtual bool isValidMove(int fromRow, int fromCol, int toRow, int toCol, const vector<vector<ChessPiece*>>& board, char playerSymbol) = 0;
+    char color;
 };
 
-class King : public ChessPiece {
+class King : public ChessPiece 
+{
 public:
-    char getSymbol() const override { return 'K'; }
-    bool isValidMove(int fromRow, int fromCol, int toRow, int toCol, const vector<vector<ChessPiece*>>& board, char playerSymbol) const override;
+    King(char a);
+    char getSymbol();
+    bool isValidMove(int fromRow, int fromCol, int toRow, int toCol, const vector<vector<ChessPiece*>>& board, char playerSymbol);
 };
 
-class Queen : public ChessPiece {
+class Queen : public ChessPiece 
+{
 public:
-    char getSymbol() const override { return 'Q'; }
-    bool isValidMove(int fromRow, int fromCol, int toRow, int toCol, const vector<vector<ChessPiece*>>& board, char playerSymbol) const override;
+    Queen(char a);
+    char getSymbol();
+    bool isValidMove(int fromRow, int fromCol, int toRow, int toCol, const vector<vector<ChessPiece*>>& board, char playerSymbol);
 };
 
-class Bishop : public ChessPiece {
+class Bishop : public ChessPiece 
+{
 public:
-    char getSymbol() const override { return 'B'; }
-    bool isValidMove(int fromRow, int fromCol, int toRow, int toCol, const vector<vector<ChessPiece*>>& board, char playerSymbol) const override;
+    Bishop(char a);
+    char getSymbol();
+    bool isValidMove(int fromRow, int fromCol, int toRow, int toCol, const vector<vector<ChessPiece*>>& board, char playerSymbol);
 };
 
-class Knight : public ChessPiece {
+class Knight : public ChessPiece 
+{
 public:
-    char getSymbol() const override { return 'N'; }
-    bool isValidMove(int fromRow, int fromCol, int toRow, int toCol, const vector<vector<ChessPiece*>>& board, char playerSymbol) const override;
+    Knight(char a);
+    char getSymbol();
+    bool isValidMove(int fromRow, int fromCol, int toRow, int toCol, const vector<vector<ChessPiece*>>& board, char playerSymbol);
 };
 
-class Rook : public ChessPiece {
+class Tower : public ChessPiece 
+{
 public:
-    char getSymbol() const override { return 'R'; }
-    bool isValidMove(int fromRow, int fromCol, int toRow, int toCol, const vector<vector<ChessPiece*>>& board, char playerSymbol) const override;
+    Tower(char a);
+    char getSymbol();
+    bool isValidMove(int fromRow, int fromCol, int toRow, int toCol, const vector<vector<ChessPiece*>>& board, char playerSymbol);
 };
 
-class Pawn : public ChessPiece {
+class Pawn : public ChessPiece 
+{
 public:
-    char getSymbol() const override { return 'P'; }
-    bool isValidMove(int fromRow, int fromCol, int toRow, int toCol, const vector<vector<ChessPiece*>>& board, char playerSymbol) const override;
+    Pawn(char a);
+    char getSymbol();
+    bool isValidMove(int fromRow, int fromCol, int toRow, int toCol, const vector<vector<ChessPiece*>>& board, char playerSymbol);
 };
 
-#endif
