@@ -1,5 +1,4 @@
-#ifndef CHESSBOARD_H
-#define CHESSBOARD_H
+#pragma once
 
 #include "ChessPiece.h"
 
@@ -22,4 +21,3 @@ public:
     ~Chessboard();
 };
 
-#endif
