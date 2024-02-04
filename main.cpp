@@ -1,4 +1,4 @@
-#include "Chessboard.h"
+﻿#include "Chessboard.h"
 #include "ChessPiece.h"
 #include <iostream>
 
@@ -14,8 +14,11 @@ int main() {
         cout << (chessboard.playerTurn ? "Biały" : "Czarny") << ", podaj ruch (np. A2 A4): ";
         char fromColChar, toColChar;
         cin >> fromColChar >> fromRow >> toColChar >> toRow;
-        fromCol = fromColChar - 'A';
-        toCol = toColChar - 'A';
+
+
+        fromCol = int(fromColChar) - 65;
+        toCol = int(toColChar) - 65;
+
 
         chessboard.makeMove(8 - fromRow, fromCol, 8 - toRow, toCol);
         chessboard.displayBoard();
