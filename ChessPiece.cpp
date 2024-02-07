@@ -2,163 +2,209 @@
 
 using namespace std;
 
-King::King(char a)
-{
+King::King(char a) {
     color = a;
 }
 
-char King::getSymbol()
-{
+char King::getSymbol() {
     return 'K';
 }
 
-bool King::isValidMove(int fromRow, int fromCol, int toRow, int toCol, const vector<vector<ChessPiece*>>& board, char playerSymbol)
-{
+bool King::isValidMove(int fromRow, int fromCol, int toRow, int toCol, const vector<vector<ChessPiece*>>& board, char playerSymbol) {
     int rowDiff = abs(toRow - fromRow);
     int colDiff = abs(toCol - fromCol);
-    // KrÛl moøe przesunπÊ siÍ o jedno pole w kaødym kierunku
-    if ((rowDiff <= 1) && (colDiff <= 1)) {
-        // Sprawdü, czy na docelowym polu nie ma w≥asnej figury lub jest figura przeciwnika
-        if (board[toRow][toCol] != nullptr && board[toRow][toCol]->getColor() != playerSymbol){
-            return true; // Ruch jest dozwolony
+    // Kr√≥l mo≈ºe przesunƒÖƒá siƒô o jedno pole w ka≈ºdym kierunku
+    if (board[toRow][toCol] != nullptr && board[toRow][toCol]->getColor() != playerSymbol) { //bicie
+        return true;
+    }
+    if (playerSymbol == 'w') {
+        if (toRow == 7 and toCol == 7) {
+            if (board[7][6] == nullptr and board[7][5] == nullptr and board[fromRow][fromCol]->firstMove == true and board[toRow][toCol] != nullptr and board[toRow][toCol]->getSymbol() == 'T') {
+                return true;
+            }
+        }
+        if (toRow == 7 and toCol == 0) {
+            if (board[7][1] == nullptr and board[7][2] == nullptr and board[7][3] == nullptr and board[fromRow][fromCol]->firstMove == true and board[toRow][toCol] != nullptr and board[toRow][toCol]->getSymbol() == 'T') {
+                return true;
+            }
         }
     }
-    return false; // Ruch jest nieprawid≥owy
+    if (playerSymbol == 'b') {
+        if (toRow == 0 and toCol == 7) {
+            if (board[0][6] == nullptr and board[0][5] == nullptr and board[fromRow][fromCol]->firstMove == true and board[toRow][toCol] != nullptr and board[toRow][toCol]->getSymbol() == 'T') {
+                return true;
+            }
+        }
+        if (toRow == 0 and toCol == 0) {
+            if (board[0][1] == nullptr and board[0][2] == nullptr and board[0][3] == nullptr and board[fromRow][fromCol]->firstMove == true and board[toRow][toCol] != nullptr and board[toRow][toCol]->getSymbol() == 'T') {
+                return true;
+            }
+        }
+    }
+    if (board[toRow][toCol] != nullptr && board[toRow][toCol]->getColor() == playerSymbol) {
+        return false;
+    }
+    if (board[toRow][toCol] == nullptr) {
+        return true;
+    }
+    return false; // Ruch jest nieprawid≈Çowy
 }
 
-Queen::Queen(char a)
-{
+Queen::Queen(char a) {
     color = a;
 }
 
-char Queen::getSymbol()
-{
+char Queen::getSymbol() {
     return 'Q';
 }
 bool Queen::isValidMove(int fromRow, int fromCol, int toRow, int toCol, const vector<vector<ChessPiece*>>& board, char playerSymbol) {
     int rowDiff = abs(toRow - fromRow);
     int colDiff = abs(toCol - fromCol);
-    // KrÛlowa moøe przesuwaÊ siÍ w pionie, poziomie lub na ukos
+    // Kr√≥lowa mo≈ºe przesuwaƒá siƒô w pionie, poziomie lub na ukos
     if ((rowDiff == 0 && colDiff > 0) || (rowDiff > 0 && colDiff == 0) || (rowDiff == colDiff)) {
-        // Sprawdü, czy na docelowym polu nie ma w≥asnej figury
-        if (board[toRow][toCol] != nullptr && board[toRow][toCol]->getColor() != playerSymbol){
-            return true; // Ruch jest dozwolony
+        if (board[toRow][toCol] != nullptr && board[toRow][toCol]->getColor() != playerSymbol) {//bicie
+            return true;
+        }
+        else if (board[toRow][toCol] != nullptr && board[toRow][toCol]->getColor() == playerSymbol) {
+            return false;
+        }
+        else if (board[toRow][toCol] == nullptr) {
+            return true;
         }
     }
-    return false; // Ruch jest nieprawid≥owy
+    return false; // Ruch jest nieprawid≈Çowy
 }
 
-Pawn::Pawn(char a)
-{
+Pawn::Pawn(char a) {
     color = a;
 }
 
-char Pawn::getSymbol()
-{
+char Pawn::getSymbol() {
     return 'P';
 }
 
-bool Pawn::isValidMove(int fromRow, int fromCol, int toRow, int toCol, const vector<vector<ChessPiece*>>& board, char playerSymbol) 
-{
-    // Sprawdü, czy ruch jest o jedno pole do przodu
+bool Pawn::isValidMove(int fromRow, int fromCol, int toRow, int toCol, const vector<vector<ChessPiece*>>& board, char playerSymbol)  {
     int rowDiff = abs(toRow - fromRow);
     int colDiff = abs(toCol - fromCol);
-
-    if (rowDiff > 1 || colDiff > 1) 
-    {
-        return false; // Ruch nie jest o jedno pole do przodu lub na ukos
+    // Sprawd≈∫, czy ruch jest o jedno pole do przodu
+    if (playerSymbol == 'w' and toRow - fromRow >= 0)
+        return false;
+    if (playerSymbol == 'b' and toRow - fromRow <= 0)
+        return false;
+    if (playerSymbol == 'w') {
+        if (colDiff == 0 and ((rowDiff == 1 and board[toRow][toCol] == nullptr) or (rowDiff == 2 and board[fromRow][fromCol]->firstMove == true and board[toRow][toCol] == nullptr)))
+            return true; // Ruch jest o jedno pole do przodu lub na ukos
+        if(colDiff == 1 and rowDiff == 1)
+            if (board[toRow][toCol] != nullptr)
+                if (char c = board[toRow][toCol]->getColor() == 'b') { //bicie
+                    return true;
+                }
+        if(colDiff == 1 and rowDiff == 1)
+            if(board[toRow][toCol] != nullptr)
+                if(char c = board[toRow][toCol]->getColor() == 'b') { //bicie
+                    return true;
+                }
     }
-    // Sprawdü, czy nie ma innych figurek na drodze
-    if (board[toRow][toCol] != nullptr) 
-    {
-        return false; // Jest figura na docelowym polu
+    else {
+        if (colDiff == 0 and ((rowDiff == 1 and board[toRow][toCol] == nullptr) or (rowDiff == 2 and board[fromRow][fromCol]->firstMove == true and board[toRow][toCol] == nullptr)))
+            return true; // Ruch jest o jedno pole do przodu lub na ukos
+        if (colDiff == 1 and rowDiff == 1)
+            if (board[toRow][toCol] != nullptr)
+                if (char c = board[toRow][toCol]->getColor() == 'w') { //bicie
+                    return true;
+                }
+        if (colDiff == 1 and rowDiff == 1)
+            if (board[toRow][toCol] != nullptr)
+                if (char c = board[toRow][toCol]->getColor() == 'w') { //bicie
+                    return true;
+                }
     }
-    // Ruch jest poprawny
-
-    return true;
+    return false;
 }
 
 
-Knight::Knight(char a)
-{
+Knight::Knight(char a) {
     color = a;
 }
 
-char Knight::getSymbol()
-{
+char Knight::getSymbol() {
     return 'S';
 }
 
 bool Knight::isValidMove(int fromRow, int fromCol, int toRow, int toCol, const vector<vector<ChessPiece*>>& board, char playerSymbol) {
     int rowDiff = abs(toRow - fromRow);
     int colDiff = abs(toCol - fromCol);
-    // Skoczek moøe przesuwaÊ siÍ o 2 pola w jednym kierunku i 1 pole w drugim kierunku
+
+    // Skoczek mo≈ºe przesuwaƒá siƒô o 2 pola w jednym kierunku i 1 pole w drugim kierunku
     if ((rowDiff == 2 && colDiff == 1) || (rowDiff == 1 && colDiff == 2)) {
-        // Sprawdü, czy na docelowym polu nie ma w≥asnej figury
-        if (board[toRow][toCol] != nullptr && board[toRow][toCol]->getColor() != playerSymbol){
-            return true; // Ruch jest dozwolony
+        if (board[toRow][toCol] != nullptr && board[toRow][toCol]->getColor() != playerSymbol) { //bicie
+            return true;
+        }
+        else if (board[toRow][toCol] != nullptr && board[toRow][toCol]->getColor() == playerSymbol) {
+            return false;
+        }
+        else if (board[toRow][toCol] == nullptr) {
+            return true;
         }
     }
-    return false; // Ruch jest nieprawid≥owy
+    return false; // Ruch jest nieprawid≈Çowy
 }
 
-Tower::Tower(char a)
-{
+Tower::Tower(char a) {
     color = a;
 }
 
-char Tower::getSymbol()
-{
+char Tower::getSymbol() {
     return 'T';
 }
 
 bool Tower::isValidMove(int fromRow, int fromCol, int toRow, int toCol, const vector<vector<ChessPiece*>>& board, char playerSymbol) {
     int rowDiff = abs(toRow - fromRow);
     int colDiff = abs(toCol - fromCol);
-    // Wieøa moøe przesuwaÊ siÍ w pionie lub poziomie
+
+    // Wie≈ºa mo≈ºe przesuwaƒá siƒô w pionie lub poziomie
     if ((rowDiff == 0 && colDiff > 0) || (rowDiff > 0 && colDiff == 0)) {
-        // Sprawdü, czy na docelowym polu nie ma w≥asnej figury
-        if (board[toRow][toCol] != nullptr && board[toRow][toCol]->getColor() != playerSymbol){
+        if (board[toRow][toCol] != nullptr && board[toRow][toCol]->getColor() != playerSymbol) {
             return true; // Ruch jest dozwolony
         }
+        else if (board[toRow][toCol] != nullptr && board[toRow][toCol]->getColor() == playerSymbol) {
+            return false;
+        }
+        else if (board[toRow][toCol] == nullptr) {
+            return true;
+        }
     }
-    return false; // Ruch jest nieprawid≥owy
+    return false; // Ruch jest nieprawid≈Çowy
 }
 
-Bishop::Bishop(char a)
-{
+Bishop::Bishop(char a) {
     color = a;
 }
 
-char Bishop::getSymbol()
-{
+char Bishop::getSymbol() {
     return 'G';
 }
 
 bool Bishop::isValidMove(int fromRow, int fromCol, int toRow, int toCol, const vector<vector<ChessPiece*>>& board, char playerSymbol) {
-    // Sprawdü, czy ruch jest diagonalny
+    // Sprawd≈∫, czy ruch jest diagonalny
     int rowDiff = abs(toRow - fromRow);
     int colDiff = abs(toCol - fromCol);
+
     if (rowDiff != colDiff) {
         return false; // Ruch nie jest diagonalny
     }
-    // Sprawdü, czy nie ma innych figurek na drodze
-    int rowDirection = (toRow > fromRow) ? 1 : -1;
-    int colDirection = (toCol > fromCol) ? 1 : -1;
-    int row = fromRow + rowDirection;
-    int col = fromCol + colDirection;
-    while (row != toRow) {
-        if (board[row][col] != nullptr) {
-            return false; // Jest figura na drodze
-        }
-        row += rowDirection;
-        col += colDirection;
+    if (board[toRow][toCol] != nullptr && board[toRow][toCol]->getColor() != playerSymbol) {
+        return true; // Ruch jest dozwolony
     }
-    // Ruch jest poprawny
+    else if (board[toRow][toCol] != nullptr && board[toRow][toCol]->getColor() == playerSymbol) {
+        return false;
+    }
+    else if (board[toRow][toCol] == nullptr) {
+        return true;
+    }
     return true;
 }
 
-char ChessPiece::getColor()
-{
+char ChessPiece::getColor() {
     return color;
 }
