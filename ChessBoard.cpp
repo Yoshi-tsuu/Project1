@@ -15,6 +15,7 @@ void Chessboard::initializeBoard() {
         cout << board[6][i]->getSymbol() << endl;
     cout << board[7][4]->getSymbol() << endl;
     cout << board[7][2]->getSymbol() << endl;
+
 }
 
 void Chessboard::initializeWhitePieces() {
@@ -107,211 +108,207 @@ void Chessboard::showMoves(int fromRow, int fromCol)    // row - cyfra
 {
     char playerSymbol = (playerTurn) ? 'w' : 'b';
     char foo = board[fromRow][fromCol]->getSymbol();
-    switch (foo) {
-        case 'P': //skanowanie pola przed pionkiem (z rozroznieniem białego od czarnego)
-            if (playerTurn == true) {
-                for (int i = 2; i >= 1; i--)
-                    for (int j = 1; j >= -1; j--) {
-                        if (isValidMove(fromRow, fromCol, fromRow - i, fromCol + j)) {
-                            coords.push_back(Coord(fromRow - i, fromCol + j));
-                        }
-                    }   
-            }
-            else {
-                for (int i = 2; i >= 1; i--)
-                    for (int j = 1; j >= -1; j--) {
-                        if (isValidMove(fromRow, fromCol, fromRow + i, fromCol + j)) {
-                            coords.push_back(Coord(fromRow + i, fromCol + j));
-                        }
+    if(foo ==  'P') { //skanowanie pola przed pionkiem (z rozroznieniem białego od czarnego)
+        if (playerTurn == true) {
+            for (int i = 2; i >= 1; i--)
+                for (int j = 1; j >= -1; j--) {
+                    if (isValidMove(fromRow, fromCol, fromRow - i, fromCol + j)) {
+                        coords.push_back(Coord(fromRow - i, fromCol + j));
                     }
-            }
-            break;
-        case 'S': //sknaowanie pól skoczka
-            for (int i = -2; i < 3; i++)
-                for (int j = -2; j < 3; j++)
+                }   
+        }
+        else {
+            for (int i = 2; i >= 1; i--)
+                for (int j = 1; j >= -1; j--) {
                     if (isValidMove(fromRow, fromCol, fromRow + i, fromCol + j)) {
                         coords.push_back(Coord(fromRow + i, fromCol + j));
                     }
-            break;
-        case 'T': // skanowanie pól w lew, góra, dól, prawo (zaczynamy od pierwszej pozycji od wiezy po czym idziemy dalej, w momencie wystapienia figur, break petli)
-            for (int i = 1; i < 8; i++) {
-                if (isValidMove(fromRow, fromCol, fromRow + i, fromCol)) {
-                    coords.push_back(Coord(fromRow + i, fromCol));
-                    if (board[fromRow + i][fromCol] != nullptr && board[fromRow + i][fromCol]->getColor() != playerSymbol)
-                        break;
                 }
-                else
+        }
+
+    }
+    else if (foo == 'S') { //sknaowanie pól skoczka
+        for (int i = -2; i < 3; i++)
+            for (int j = -2; j < 3; j++)
+                if (isValidMove(fromRow, fromCol, fromRow + i, fromCol + j)) {
+                    coords.push_back(Coord(fromRow + i, fromCol + j));
+                }
+    }
+    else if (foo == 'T') { // skanowanie pól w lew, góra, dól, prawo (zaczynamy od pierwszej pozycji od wiezy po czym idziemy dalej, w momencie wystapienia figur, break petli)
+        for (int i = 1; i < 8; i++) {
+            if (isValidMove(fromRow, fromCol, fromRow + i, fromCol)) {
+                coords.push_back(Coord(fromRow + i, fromCol));
+                if (board[fromRow + i][fromCol] != nullptr && board[fromRow + i][fromCol]->getColor() != playerSymbol)
                     break;
             }
-            for (int i = -1; i > -8; i--) {
-                if (isValidMove(fromRow, fromCol, fromRow + i, fromCol)) {
-                    coords.push_back(Coord(fromRow + i, fromCol));
-                    if (board[fromRow + i][fromCol] != nullptr && board[fromRow + i][fromCol]->getColor() != playerSymbol)
-                        break;
-                }
-                else
+            else
+                break;
+        }
+        for (int i = -1; i > -8; i--) {
+            if (isValidMove(fromRow, fromCol, fromRow + i, fromCol)) {
+                coords.push_back(Coord(fromRow + i, fromCol));
+                if (board[fromRow + i][fromCol] != nullptr && board[fromRow + i][fromCol]->getColor() != playerSymbol)
                     break;
             }
-            for (int i = 1; i < 8; i++) {
-                if (isValidMove(fromRow, fromCol, fromRow, fromCol + i)) {
-                    coords.push_back(Coord(fromRow, fromCol + i));
-    
-                    if (board[fromRow][fromCol + i] != nullptr && board[fromRow][fromCol + i]->getColor() != playerSymbol)
-                        break;
-                }
-                else
+            else
+                break;
+        }
+        for (int i = 1; i < 8; i++) {
+            if (isValidMove(fromRow, fromCol, fromRow, fromCol + i)) {
+                coords.push_back(Coord(fromRow, fromCol + i));
+                if (board[fromRow][fromCol + i] != nullptr && board[fromRow][fromCol + i]->getColor() != playerSymbol)
                     break;
             }
-            for (int i = -1; i > -8; i--) {
-                if (isValidMove(fromRow, fromCol, fromRow, fromCol + i)) {
-                    coords.push_back(Coord(fromRow, fromCol + i));
-                    if (board[fromRow][fromCol + i] != nullptr && board[fromRow][fromCol + i]->getColor() != playerSymbol)
-                        break;
-                }
-                else
+            else
+                break;
+        }
+        for (int i = -1; i > -8; i--) {
+            if (isValidMove(fromRow, fromCol, fromRow, fromCol + i)) {
+                coords.push_back(Coord(fromRow, fromCol + i));
+                if (board[fromRow][fromCol + i] != nullptr && board[fromRow][fromCol + i]->getColor() != playerSymbol)
                     break;
             }
-            break;
-        case 'G': // skanowanie diaganoalne, zasada ta samo co dla wiezy
-            for (int i = 1; i < 8; i++) {
-                if (isValidMove(fromRow, fromCol, fromRow + i, fromCol + i)) {
-                    coords.push_back(Coord(fromRow + i, fromCol + i));
-                    if (board[fromRow + i][fromCol + i] != nullptr && board[fromRow + i][fromCol + i]->getColor() != playerSymbol)
-                        break;
-                }
-                else
+            else
+                break;
+        }
+    }
+    else if (foo == 'G') { // skanowanie diaganoalne, zasada ta samo co dla wiezy
+        for (int i = 1; i < 8; i++) {
+            if (isValidMove(fromRow, fromCol, fromRow + i, fromCol + i)) {
+                coords.push_back(Coord(fromRow + i, fromCol + i));
+                if (board[fromRow + i][fromCol + i] != nullptr && board[fromRow + i][fromCol + i]->getColor() != playerSymbol)
                     break;
             }
-            for (int i = -1; i > -8; i--) {
-                if (isValidMove(fromRow, fromCol, fromRow + i, fromCol + i)) {
-                    coords.push_back(Coord(fromRow + i, fromCol + i));
-                    if (board[fromRow + i][fromCol + i] != nullptr && board[fromRow + i][fromCol + i]->getColor() != playerSymbol)
-                        break;
-                }
-                else
+            else
+                break;
+        }
+        for (int i = -1; i > -8; i--) {
+            if (isValidMove(fromRow, fromCol, fromRow + i, fromCol + i)) {
+                coords.push_back(Coord(fromRow + i, fromCol + i));
+                if (board[fromRow + i][fromCol + i] != nullptr && board[fromRow + i][fromCol + i]->getColor() != playerSymbol)
                     break;
             }
-            for (int i = 1; i < 8; i++) {
-                if (isValidMove(fromRow, fromCol, fromRow + i, fromCol - i)) {
-                    coords.push_back(Coord(fromRow + i, fromCol - i));
-                    if (board[fromRow + i][fromCol - i] != nullptr && board[fromRow + i][fromCol - i]->getColor() != playerSymbol)
-                        break;
-                }
-                else
+            else
+                break;
+        }
+        for (int i = 1; i < 8; i++) {
+            if (isValidMove(fromRow, fromCol, fromRow + i, fromCol - i)) {
+                coords.push_back(Coord(fromRow + i, fromCol - i));
+                if (board[fromRow + i][fromCol - i] != nullptr && board[fromRow + i][fromCol - i]->getColor() != playerSymbol)
                     break;
             }
-            for (int i = -1; i > -8; i--) {
-                if (isValidMove(fromRow, fromCol, fromRow + i, fromCol - i)) {
-                    coords.push_back(Coord(fromRow + i, fromCol - i));
-                    if (board[fromRow + i][fromCol - i] != nullptr && board[fromRow + i][fromCol - i]->getColor() != playerSymbol)
-                        break;
-                }
-                else
+            else
+                break;
+        }
+        for (int i = -1; i > -8; i--) {
+            if (isValidMove(fromRow, fromCol, fromRow + i, fromCol - i)) {
+                coords.push_back(Coord(fromRow + i, fromCol - i));
+                if (board[fromRow + i][fromCol - i] != nullptr && board[fromRow + i][fromCol - i]->getColor() != playerSymbol)
                     break;
             }
-            break;
-        case 'Q': // polaczeni gonca i wiezy
-            for (int i = 1; i < 8; i++) {
-                if (isValidMove(fromRow, fromCol, fromRow + i, fromCol)) {
-                    coords.push_back(Coord(fromRow + i, fromCol));
-                    if (board[fromRow + i][fromCol] != nullptr && board[fromRow + i][fromCol]->getColor() != playerSymbol)
-                        break;
-                }
-                else
+            else
+                break;
+        }
+    }
+    else  if (foo == 'Q') { // polaczeni gonca i wiezy
+        for (int i = 1; i < 8; i++) {
+            if (isValidMove(fromRow, fromCol, fromRow + i, fromCol)) {
+                coords.push_back(Coord(fromRow + i, fromCol));
+                if (board[fromRow + i][fromCol] != nullptr && board[fromRow + i][fromCol]->getColor() != playerSymbol)
                     break;
             }
-            for (int i = -1; i > -8; i--) {
-                if (isValidMove(fromRow, fromCol, fromRow + i, fromCol)) {
-                    coords.push_back(Coord(fromRow + i, fromCol));
-                    if (board[fromRow + i][fromCol] != nullptr && board[fromRow + i][fromCol]->getColor() != playerSymbol)
-                        break;
-                }
-                else
+            else
+                break;
+        }
+        for (int i = -1; i > -8; i--) {
+            if (isValidMove(fromRow, fromCol, fromRow + i, fromCol)) {
+                coords.push_back(Coord(fromRow + i, fromCol));
+                if (board[fromRow + i][fromCol] != nullptr && board[fromRow + i][fromCol]->getColor() != playerSymbol)
                     break;
             }
-            for (int i = 1; i < 8; i++) {
-                if (isValidMove(fromRow, fromCol, fromRow, fromCol + i)) {
-                    coords.push_back(Coord(fromRow, fromCol + i));
-                    if (board[fromRow][fromCol + i] != nullptr && board[fromRow][fromCol + i]->getColor() != playerSymbol)
-                        break;
-                }
-                else
+            else
+                break;
+        }
+        for (int i = 1; i < 8; i++) {
+            if (isValidMove(fromRow, fromCol, fromRow, fromCol + i)) {
+                coords.push_back(Coord(fromRow, fromCol + i));
+                if (board[fromRow][fromCol + i] != nullptr && board[fromRow][fromCol + i]->getColor() != playerSymbol)
                     break;
             }
-            for (int i = -1; i > -8; i--) {
-                if (isValidMove(fromRow, fromCol, fromRow, fromCol + i)) {
-                    coords.push_back(Coord(fromRow, fromCol + i));
-                    if (board[fromRow][fromCol + i] != nullptr && board[fromRow][fromCol + i]->getColor() != playerSymbol)
-                        break;
-                }
-                else
+            else
+                break;
+        }
+        for (int i = -1; i > -8; i--) {
+            if (isValidMove(fromRow, fromCol, fromRow, fromCol + i)) {
+                coords.push_back(Coord(fromRow, fromCol + i));
+                if (board[fromRow][fromCol + i] != nullptr && board[fromRow][fromCol + i]->getColor() != playerSymbol)
                     break;
             }
-            for (int i = 1; i < 8; i++) {
-                if (isValidMove(fromRow, fromCol, fromRow + i, fromCol + i)) {
-                    coords.push_back(Coord(fromRow + i, fromCol + i));
-                    if (board[fromRow + i][fromCol + i] != nullptr && board[fromRow + i][fromCol + i]->getColor() != playerSymbol)
-                        break;
-                }
-                else
+            else
+                break;
+        }
+        for (int i = 1; i < 8; i++) {
+            if (isValidMove(fromRow, fromCol, fromRow + i, fromCol + i)) {
+                coords.push_back(Coord(fromRow + i, fromCol + i));
+                if (board[fromRow + i][fromCol + i] != nullptr && board[fromRow + i][fromCol + i]->getColor() != playerSymbol)
                     break;
             }
-            for (int i = -1; i > -8; i--) {
-                if (isValidMove(fromRow, fromCol, fromRow + i, fromCol + i)) {
-                    coords.push_back(Coord(fromRow + i, fromCol + i));
-                    if (board[fromRow + i][fromCol + i] != nullptr && board[fromRow + i][fromCol + i]->getColor() != playerSymbol)
-                        break;
-                }
-                else
+            else
+                break;
+        }
+        for (int i = -1; i > -8; i--) {
+            if (isValidMove(fromRow, fromCol, fromRow + i, fromCol + i)) {
+                coords.push_back(Coord(fromRow + i, fromCol + i));
+                if (board[fromRow + i][fromCol + i] != nullptr && board[fromRow + i][fromCol + i]->getColor() != playerSymbol)
                     break;
             }
-            for (int i = 1; i < 8; i++) {
-                if (isValidMove(fromRow, fromCol, fromRow + i, fromCol - i)) {
-                    coords.push_back(Coord(fromRow + i, fromCol - i));
-                    if (board[fromRow + i][fromCol - i] != nullptr && board[fromRow + i][fromCol - i]->getColor() != playerSymbol)
-                        break;
-                }
-                else
+            else
+                break;
+        }
+        for (int i = 1; i < 8; i++) {
+            if (isValidMove(fromRow, fromCol, fromRow + i, fromCol - i)) {
+                coords.push_back(Coord(fromRow + i, fromCol - i));
+                if (board[fromRow + i][fromCol - i] != nullptr && board[fromRow + i][fromCol - i]->getColor() != playerSymbol)
                     break;
             }
-            for (int i = -1; i > -8; i--) {
-                if (isValidMove(fromRow, fromCol, fromRow + i, fromCol - i)) {
-                    coords.push_back(Coord(fromRow + i, fromCol - i));
-    
-                    if (board[fromRow + i][fromCol - i] != nullptr && board[fromRow + i][fromCol - i]->getColor() != playerSymbol)
-                        break;
-                }
-                else
+            else
+                break;
+        }
+        for (int i = -1; i > -8; i--) {
+            if (isValidMove(fromRow, fromCol, fromRow + i, fromCol - i)) {
+                coords.push_back(Coord(fromRow + i, fromCol - i));
+                if (board[fromRow + i][fromCol - i] != nullptr && board[fromRow + i][fromCol - i]->getColor() != playerSymbol)
                     break;
             }
-            break;
-        case 'K': // skanowanie pol dookola krola oraz sprawdznie warunkow roszady
-            for (int i = 1; i > -2; i--)
-                for(int j = 1; j > -2; j--)
-                    if(!(i == 0 and j == 0))
-                        if (isValidMove(fromRow, fromCol, fromRow + i, fromCol + j)) {
-                            coords.push_back(Coord(fromRow + i, fromCol + j));
-                        }
-            if(board[fromRow][fromCol]->firstMove == true) {
-                if(board[fromRow][fromCol]->getColor() == 'w') {
-                    if (isValidMove(fromRow, fromCol, 7, 7)) {
-                        coords.push_back(Coord(7, 7));
+            else
+                break;
+        }
+    }
+    else if (foo == 'K') { // skanowanie pol dookola krola oraz sprawdznie warunkow roszady
+        for (int i = 1; i > -2; i--)
+            for(int j = 1; j > -2; j--)
+                if(!(i == 0 and j == 0))
+                    if (isValidMove(fromRow, fromCol, fromRow + i, fromCol + j)) {
+                        coords.push_back(Coord(fromRow + i, fromCol + j));
                     }
-                    if (isValidMove(fromRow, fromCol, 7, 0)) {
-                        coords.push_back(Coord(7, 0));
-                    }
+        if(board[fromRow][fromCol]->firstMove == true) {
+            if(board[fromRow][fromCol]->getColor() == 'w') {
+                if (isValidMove(fromRow, fromCol, 7, 7)) {
+                    coords.push_back(Coord(7, 7));
                 }
-                if (board[fromRow][fromCol]->getColor() == 'b') {
-                    if (isValidMove(fromRow, fromCol, 0, 0)) {
-                        coords.push_back(Coord(0, 0));
-                    }
-                    if (isValidMove(fromRow, fromCol, 0, 7)) {
-                        coords.push_back(Coord(0, 7));
-                    }
+                if (isValidMove(fromRow, fromCol, 7, 0)) {
+                    coords.push_back(Coord(7, 0));
+                }
+            }   
+            if (board[fromRow][fromCol]->getColor() == 'b') {
+                if (isValidMove(fromRow, fromCol, 0, 0)) {
+                    coords.push_back(Coord(0, 0));
+                }
+                if (isValidMove(fromRow, fromCol, 0, 7)) {
+                    coords.push_back(Coord(0, 7));
                 }
             }
-        default:
-            break;
+        }
     }
 }
 
@@ -325,7 +322,6 @@ void Chessboard::displayMoves() {
 }
 
 void Chessboard::makeMove(int fromRow, int fromCol, int toRow, int toCol) {
-
     char playerSymbol = (playerTurn) ? 'w' : 'b';
     if (board[toRow][toCol] != nullptr and board[toRow][toCol]->getColor() == playerTurn) { // sprawdznie czy wybrano wlasciwego pionka
         cout << "Błąd: Nieprawidłowy ruch." << endl;
@@ -408,56 +404,55 @@ void Chessboard::makeMove(int fromRow, int fromCol, int toRow, int toCol) {
     board[fromRow][fromCol] = nullptr; // zmiana poprzedniego pola figury na nullptr
     if (board[toRow][toCol]->getSymbol() == 'P' and (toRow == 0 or toRow == 7)) { // awans pionka
         if (board[toRow][toCol]->getColor() == 'w') {
-            spag:
-            char aw;
-            cout << "Wybierz figure do awansu: ";
-            cin >> aw;
-            switch (aw) {
-            case 'Q':
-                board[toRow][toCol] = new Queen('w');
-                break;
-            case 'T':
-                board[toRow][toCol] = new Tower('w');
-                break;
-            case 'S':
-                board[toRow][toCol] = new Knight('w');
-                break;
-            case 'G':
-                board[toRow][toCol] = new Bishop('w');
-                break;
-            default:
-                goto spag;
-                break;
+            bool out = false;
+            while (out == false) {
+                char aw;
+                cout << "Wybierz figure do awansu: ";
+                cin >> aw;
+                if (aw == 'Q') {
+                    board[toRow][toCol] = new Queen('w');
+                    out = true;
+                }
+                else if (aw == 'T') {
+                    board[toRow][toCol] = new Tower('w');
+                    out = true;
+                }
+                else if (aw == 'S') {
+                    board[toRow][toCol] = new Knight('w');
+                    out = true;
+                }
+                else if (aw == 'G') {
+                    board[toRow][toCol] = new Bishop('w');
+                    out = true;
+                }
             }
         }
-        else
-        {
-        spag2:
-
-            char aw;
-            cout << "Wybierz figure do awansu: ";
-            cin >> aw;
-            switch (aw) {
-            case 'Q':
-                board[toRow][toCol] = new Queen('b');
-                break;
-            case 'T':
-                board[toRow][toCol] = new Tower('b');
-                break;
-            case 'S':
-                board[toRow][toCol] = new Knight('b');
-                break;
-            case 'G':
-                board[toRow][toCol] = new Bishop('b');
-                break;
-            default:
-                goto spag2;
-                break;
+        else {
+            bool out = false;
+            while (out == false) {
+                char aw;
+                cout << "Wybierz figure do awansu: ";
+                cin >> aw;
+                if (aw == 'Q') {
+                    board[toRow][toCol] = new Queen('b');
+                    out = true;
+                }
+                else if (aw == 'T') {
+                    board[toRow][toCol] = new Tower('b');
+                    out = true;
+                }
+                else if (aw == 'S') {
+                    board[toRow][toCol] = new Knight('b');
+                    out = true;
+                }
+                else if (aw == 'G') {
+                    board[toRow][toCol] = new Bishop('b');
+                    out = true;
+                }
             }
         }
     }
     playerTurn = !playerTurn; // Zmiana tury po udanym ruchu
-
 }
 
 void Chessboard::clear() {
@@ -468,7 +463,7 @@ void Chessboard::clear() {
 }
 
 bool Chessboard::isKingInCheck() {
-    if (playerTurn == true) { // generowanie tablicy ze wszystkimi mozliwymi ruchami figur (z rozroznieniem czarnych od białych)
+    if (playerTurn == true) { // generowanie tablicy ze wszystkimi mozliwymi ruchami figur (z rozroznieniem czarnych od białych
         for (int i = 0; i < 8; i++)
             for (int j = 0; j < 8; j++)
                 if (board[i][j] != nullptr) {
@@ -496,12 +491,10 @@ bool Chessboard::isKingInCheck() {
                 }
         playerTurn = false;
     }
-
     int WK_row;
     int WK_col;
     int BK_row;
     int BK_col;
-
     for (int i = 0; i < 8; i++) // skanowanie w poszukiwanie króla
         for (int j = 0; j < 8; j++)
             if (board[i][j] != nullptr) {
@@ -514,7 +507,6 @@ bool Chessboard::isKingInCheck() {
                     BK_col = j;
                 }
             }
-
     for (int i = 0; i < coords.size(); i++) { // jeżeli pozucja krola znajduje się w tablicy możliwych ruchow przeciwnika wyświetl komunikat
         if (coords[i].col == WK_col and coords[i].row == WK_row) {
             cout << "(Uwaga!!! Biału w szachu)" << endl;
@@ -522,10 +514,21 @@ bool Chessboard::isKingInCheck() {
         if (coords[i].col == BK_col and coords[i].row == BK_row) {
             cout << "(Uwaga!!! Czarny w szachu)" << endl;
         }
-
     }
     coords.clear();
     return 0;
+}
+
+void Chessboard::startTurn() {
+    cout << (playerTurn ? "Biały" : "Czarny") << ", wybierz bierke (np. A2): ";
+}
+
+void Chessboard::displayMessage(string str) {
+    cout << str;
+}
+
+void Chessboard::gameEnd() {
+    cout << (playerTurn ? "Czarny" : "Biały") << " wygrywa!" << endl;
 }
 
 Chessboard::~Chessboard() {
