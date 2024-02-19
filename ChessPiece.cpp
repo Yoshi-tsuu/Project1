@@ -57,12 +57,13 @@ Queen::Queen(char a) {
 char Queen::getSymbol() {
     return 'Q';
 }
+
 bool Queen::isValidMove(int fromRow, int fromCol, int toRow, int toCol, const vector<vector<ChessPiece*>>& board, char playerSymbol) {
     int rowDiff = abs(toRow - fromRow);
     int colDiff = abs(toCol - fromCol);
     // Królowa może przesuwać się w pionie, poziomie lub na ukos
     if ((rowDiff == 0 && colDiff > 0) || (rowDiff > 0 && colDiff == 0) || (rowDiff == colDiff)) {
-        if (board[toRow][toCol] != nullptr && board[toRow][toCol]->getColor() != playerSymbol) {//bicie
+        if (board[toRow][toCol] != nullptr && board[toRow][toCol]->getColor() != playerSymbol) { //bicie
             return true;
         }
         else if (board[toRow][toCol] != nullptr && board[toRow][toCol]->getColor() == playerSymbol) {
@@ -83,7 +84,7 @@ char Pawn::getSymbol() {
     return 'P';
 }
 
-bool Pawn::isValidMove(int fromRow, int fromCol, int toRow, int toCol, const vector<vector<ChessPiece*>>& board, char playerSymbol)  {
+bool Pawn::isValidMove(int fromRow, int fromCol, int toRow, int toCol, const vector<vector<ChessPiece*>>& board, char playerSymbol) {
     int rowDiff = abs(toRow - fromRow);
     int colDiff = abs(toCol - fromCol);
     // Sprawdź, czy ruch jest o jedno pole do przodu
@@ -122,7 +123,6 @@ bool Pawn::isValidMove(int fromRow, int fromCol, int toRow, int toCol, const vec
     return false;
 }
 
-
 Knight::Knight(char a) {
     color = a;
 }
@@ -134,7 +134,6 @@ char Knight::getSymbol() {
 bool Knight::isValidMove(int fromRow, int fromCol, int toRow, int toCol, const vector<vector<ChessPiece*>>& board, char playerSymbol) {
     int rowDiff = abs(toRow - fromRow);
     int colDiff = abs(toCol - fromCol);
-
     // Skoczek może przesuwać się o 2 pola w jednym kierunku i 1 pole w drugim kierunku
     if ((rowDiff == 2 && colDiff == 1) || (rowDiff == 1 && colDiff == 2)) {
         if (board[toRow][toCol] != nullptr && board[toRow][toCol]->getColor() != playerSymbol) { //bicie
@@ -161,7 +160,6 @@ char Tower::getSymbol() {
 bool Tower::isValidMove(int fromRow, int fromCol, int toRow, int toCol, const vector<vector<ChessPiece*>>& board, char playerSymbol) {
     int rowDiff = abs(toRow - fromRow);
     int colDiff = abs(toCol - fromCol);
-
     // Wieża może przesuwać się w pionie lub poziomie
     if ((rowDiff == 0 && colDiff > 0) || (rowDiff > 0 && colDiff == 0)) {
         if (board[toRow][toCol] != nullptr && board[toRow][toCol]->getColor() != playerSymbol) {
@@ -189,7 +187,6 @@ bool Bishop::isValidMove(int fromRow, int fromCol, int toRow, int toCol, const v
     // Sprawdź, czy ruch jest diagonalny
     int rowDiff = abs(toRow - fromRow);
     int colDiff = abs(toCol - fromCol);
-
     if (rowDiff != colDiff) {
         return false; // Ruch nie jest diagonalny
     }
