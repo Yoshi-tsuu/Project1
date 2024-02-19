@@ -28,5 +28,8 @@ public:
     void makeMove(int fromRow, int fromCol, int toRow, int toCol); // zmiana pozycji pionka
     void clear(); // czysczenie zaznaczenia
     bool isKingInCheck(); // sprawdzanie czy któryś z królów jest w szachu
+    void startTurn();
+    void displayMessage(string str);
+    void gameEnd();
     ~Chessboard(); // destruktor
 };
