@@ -20,6 +20,8 @@ public:
     void initializeBoard(); // inicjalizacja
     void initializeWhitePieces(); // inicjalizcja białych pionków
     void initializeBlackPieces(); // inicjalizcja czarnych pionków
+    int getRowFromPlayer(); // pobranie rz?du
+    int getColFromPlayer(); // pobranie kolumny
     void displayBoard(); // wyświetlanie planszy oraz aktualnych pionków
     bool isValidMove(int fromRow, int fromCol, int toRow, int toCol); // sprawdzanie ruchu dla konkretnej figury
     bool select(int fromRow, int fromCol); // podświetlenie wybranego pionka
@@ -27,9 +29,10 @@ public:
     void displayMoves(); // wiświtlanie możliwych ruchów figur
     void makeMove(int fromRow, int fromCol, int toRow, int toCol); // zmiana pozycji pionka
     void clear(); // czysczenie zaznaczenia
-    bool isKingInCheck(); // sprawdzanie czy któryś z królów jest w szachu
+    bool isKingInCheck(); // sprawdzanie czy który z królów jest w szachu
     void startTurn();
-    void displayMessage(string str);
+    void displayMessage(string str); // wy?wietlanie komunikatów
     void gameEnd();
+    void invalidMove(); // wprowadzone dane s? b??dne
     ~Chessboard(); // destruktor
 };
