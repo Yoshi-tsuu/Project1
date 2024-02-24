@@ -56,3 +56,4 @@ public:
     char getSymbol();
     bool isValidMove(int fromRow, int fromCol, int toRow, int toCol, const vector<vector<ChessPiece*>>& board, char playerSymbol);
 };
+
