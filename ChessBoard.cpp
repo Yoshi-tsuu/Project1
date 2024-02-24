@@ -1,4 +1,4 @@
-#include "Chessboard.h"
+#include "ChessBoard.h"
 
 using namespace std;
 
@@ -46,6 +46,23 @@ void Chessboard::initializeBlackPieces() {
     }
 }
 
+int Chessboard::getRowFromPlayer(){
+    int row;
+    cin >> row;
+    return row;
+}
+
+int Chessboard::getColFromPlayer(){
+    char colChar;
+    int col = 0;
+    cin >> colChar;
+    if (colChar > 64 and colChar < 73)
+        col = int(colChar) - 65;
+    else if (colChar > 96 and colChar < 105)
+        col = int(colChar) - 97;
+    return col;
+}
+
 void Chessboard::displayBoard() {
     system("cls");
     cout << "   A B C D E F G H" << endl;
@@ -76,15 +93,15 @@ bool Chessboard::isValidMove(int fromRow, int fromCol, int toRow, int toCol) {
     }
     char playerSymbol = playerTurn ? 'w' : 'b';
     if (playerSymbol != piece->getColor())
-        return false;
+        return false; 
     int rowDiff = abs(toRow - fromRow);
     int colDiff = abs(toCol - fromCol);
     // Sprawdź, czy docelowe pole nie jest poza planszą
-    if (toRow < 0 || toRow > 7 || toCol < 0 || toCol > 7) {
+    if (toRow < 0 || toRow > 7 || toCol < 0 || toCol > 7){
         return false; // Pole docelowe jest poza planszą
     }
     // Sprawdź, czy ruch jest dozwolony zgodnie z zasadami konkretnej figury
-    if (!piece->isValidMove(fromRow, fromCol, toRow, toCol, board, playerSymbol)) {
+    if (!piece->isValidMove(fromRow, fromCol, toRow, toCol, board, playerSymbol)){
         return false; // Ruch nie jest dozwolony
     }
     return true; // Ruch jest dozwolony
@@ -463,7 +480,7 @@ void Chessboard::clear() {
 }
 
 bool Chessboard::isKingInCheck() {
-    if (playerTurn == true) { // generowanie tablicy ze wszystkimi mozliwymi ruchami figur (z rozroznieniem czarnych od białych
+    if (playerTurn == true) { // generowanie tablicy ze wszystkimi mozliwymi ruchami figur (z rozroznieniem czarnych od białych)
         for (int i = 0; i < 8; i++)
             for (int j = 0; j < 8; j++)
                 if (board[i][j] != nullptr) {
@@ -529,6 +546,10 @@ void Chessboard::displayMessage(string str) {
 
 void Chessboard::gameEnd() {
     cout << (playerTurn ? "Czarny" : "Biały") << " wygrywa!" << endl;
+}
+
+void Chessboard::invalidMove() {
+    displayMessage("Błędny wybór \n");
 }
 
 Chessboard::~Chessboard() {
